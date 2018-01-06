@@ -1,0 +1,9 @@
+{
+    "name": "com.unity.2d.spriteeditormodule.Editor",
+    "references": [
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

@@ -1,0 +1,11 @@
+{
+	"name": "com.unity.2d.psdimporter",
+	"version": "1.0.0-experimental",
+	"unity": "2018.1",
+	"description": "2D PSDImporter",
+	"keywords": ["2d", "psdimporter", "assetimporter"],
+	"category": "2D",
+	"dependencies": {
+        "com.unity.2d.common": "1.0.2-experimental"
+	}
+}

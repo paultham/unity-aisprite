@@ -1,0 +1,13 @@
+{
+    "name": "com.unity.2d.spriteeditormodule.EditorTests",
+    "references": [
+        "com.unity.2d.spriteeditormodule.Editor"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
