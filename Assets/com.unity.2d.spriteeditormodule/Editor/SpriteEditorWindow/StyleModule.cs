@@ -1,9 +1,57 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 namespace UnityEditor.Experimental.U2D
 {
+    public static class SpriteStyler
+    {
+        static void MergeAlpha()
+        {
+
+        }
+
+        static string MakeUrl(string assetPath, string styleName)
+        {
+            styleName = styleName.ToLower();
+            var projectPath = System.IO.Path.GetDirectoryName(Application.dataPath);
+            var fullPath = System.IO.Path.Combine(projectPath, assetPath);
+            return "http://localhost:5000/?path=" + fullPath + "&model=" + styleName;
+        }
+        static IEnumerator Run(WWW www)
+        {
+            yield return www;
+        }
+
+        static void WaitCoroutine(IEnumerator func) 
+        {
+            while (func.MoveNext ()) {
+                if (func.Current != null) {
+                    IEnumerator num;
+                    try {
+                        num = (IEnumerator)func.Current;
+                    } catch (InvalidCastException) {
+                        if (func.Current.GetType () == typeof(WaitForSeconds))
+                            Debug.LogWarning ("Skipped call to WaitForSeconds. Use WaitForSecondsRealtime instead.");
+                        return;  // Skip WaitForSeconds, WaitForEndOfFrame and WaitForFixedUpdate
+                    }
+                    WaitCoroutine (num);
+                }
+            }
+	    }
+
+        public static Texture2D Stylize(string assetPath, string styleName)
+        {
+            var url = MakeUrl(assetPath, styleName);
+            using(var www = new WWW(url))
+            {
+                WaitCoroutine(Run(www));
+                return www.texture;
+            }
+        }
+    }
+
     public struct MLStyle
     {
         public string name;
@@ -40,16 +88,12 @@ namespace UnityEditor.Experimental.U2D
                 processFunc = null
             },
             new MLStyle(){
-                name = "Cell",
+                name = "Mosaic",
                 processFunc = CellProcessFunc
             },
             new MLStyle(){
-                name = "Ink",
+                name = "Waves",
                 processFunc = InkProcessFunc
-            },
-            new MLStyle(){
-                name = "Canvas",
-                processFunc = CanvasProcessFunc
             },
         };
 
@@ -139,13 +183,13 @@ namespace UnityEditor.Experimental.U2D
             if (!int.TryParse(m_AssetImporter.userData, out m_CurrentStyleSelection))
                 m_CurrentStyleSelection = 0;
 
-            var tex = m_TextureDataProvider.GetReadableTexture2D();
-            if (kMLStyle[m_CurrentStyleSelection].processFunc != null)
-            {
-                m_ProcessedTexture = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
-                m_ProcessedTexture.SetPixels32(kMLStyle[m_CurrentStyleSelection].processFunc(tex));
-                m_ProcessedTexture.Apply();
-            }
+            // var tex = m_TextureDataProvider.GetReadableTexture2D();
+            // if (kMLStyle[m_CurrentStyleSelection].processFunc != null)
+            // {
+            //     m_ProcessedTexture = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
+            //     m_ProcessedTexture.SetPixels32(kMLStyle[m_CurrentStyleSelection].processFunc(tex));
+            //     m_ProcessedTexture.Apply();
+            // }
             
         }
 
@@ -189,18 +233,15 @@ namespace UnityEditor.Experimental.U2D
 
         private void StyleChange()
         {
-            var tex = m_TextureDataProvider.GetReadableTexture2D();
-            if(m_ProcessedTexture == null)
-                m_ProcessedTexture = new Texture2D(tex.width, tex.height, TextureFormat.ARGB32, false);
-            if (kMLStyle[m_CurrentStyleSelection].processFunc != null)
+            UnityEngine.Object.DestroyImmediate(m_ProcessedTexture);
+            if (kMLStyle[m_CurrentStyleSelection].processFunc == null)
             {
-                m_ProcessedTexture.SetPixels32(kMLStyle[m_CurrentStyleSelection].processFunc(tex));
-                m_ProcessedTexture.Apply();
+                m_ProcessedTexture = m_TextureDataProvider.GetReadableTexture2D();
             }
-            else if(m_ProcessedTexture != null)
+            else
             {
-                UnityEngine.Object.DestroyImmediate(m_ProcessedTexture);
-                m_ProcessedTexture = null;
+                var assetPath = AssetDatabase.GetAssetPath(m_AssetImporter);
+                m_ProcessedTexture = SpriteStyler.Stylize(assetPath, kMLStyle[m_CurrentStyleSelection].name);
             }
             spriteEditor.SetDataModified();
         }
@@ -225,7 +266,9 @@ namespace UnityEditor.Experimental.U2D
                     if (StyleModule.kMLStyle[style].processFunc != null)
                     {
                         // Only works when texture is set to readable in importer
-                        texture.SetPixels32(StyleModule.kMLStyle[style].processFunc(texture));
+                        var srcTex = SpriteStyler.Stylize(assetPath, StyleModule.kMLStyle[style].name);
+                        var pixels = srcTex.GetPixels32();
+                        texture.SetPixels32(pixels);
                         texture.Apply();
                     }
                 }
