@@ -95,6 +95,14 @@ namespace UnityEditor.Experimental.U2D
                 name = "Waves",
                 processFunc = InkProcessFunc
             },
+            new MLStyle(){
+                name = "Candy",
+                processFunc = InkProcessFunc
+            },
+            new MLStyle(){
+                name = "Udnie",
+                processFunc = InkProcessFunc
+            },
         };
 
         string[] m_StyleSelectionStrings;

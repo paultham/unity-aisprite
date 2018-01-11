@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 542b3340e0cd94373a9b1bbd64d20f06
+guid: 550599e54d50e4c2dab4c74a553b0840
 TextureImporter:
   fileIDToRecycleName:
     21300000: Andre_0
@@ -157,6 +157,6 @@ TextureImporter:
     edges: []
     weights: []
   spritePackingTag: 
-  userData: 1
+  userData: 4
   assetBundleName: 
   assetBundleVariant: 

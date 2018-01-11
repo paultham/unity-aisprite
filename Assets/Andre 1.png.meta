@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 542b3340e0cd94373a9b1bbd64d20f06
+guid: 5097f9d2ce253435e8766c2c4e6aa6c5
 TextureImporter:
   fileIDToRecycleName:
     21300000: Andre_0
@@ -59,7 +59,7 @@ TextureImporter:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -70,7 +70,7 @@ TextureImporter:
   - serializedVersion: 2
     buildTarget: Standalone
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -81,7 +81,7 @@ TextureImporter:
   - serializedVersion: 2
     buildTarget: iPhone
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
@@ -157,6 +157,6 @@ TextureImporter:
     edges: []
     weights: []
   spritePackingTag: 
-  userData: 1
+  userData: 2
   assetBundleName: 
   assetBundleVariant: 
